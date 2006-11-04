@@ -10,7 +10,6 @@ include "Zend.php";
 Zend::loadClass('Zend_Controller_Front');
 Zend::loadClass('Zend_Controller_RewriteRouter');
 Zend::loadClass('Zend_View');
-Zend::loadClass('Zend_Config');
 Zend::loadClass('Zend_Config_Ini');
 Zend::loadClass('Zend_Db');
 Zend::loadClass('Zend_Db_Table');
@@ -35,7 +34,8 @@ Zend::register('view', $view);
 
 // setup controller
 $router = new Zend_Controller_RewriteRouter();
-$baseUrl = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], '/index.php'));
+$baseUrl = substr($_SERVER['PHP_SELF'], 0, 
+        strpos($_SERVER['PHP_SELF'], '/index.php'));
 $router->setRewriteBase($baseUrl);
 $controller = Zend_Controller_Front::getInstance();
 $controller->setRouter($router);
