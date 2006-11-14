@@ -39,6 +39,6 @@ $baseUrl = substr($_SERVER['PHP_SELF'], 0,
 $router->setRewriteBase($baseUrl);
 $controller = Zend_Controller_Front::getInstance();
 $controller->setRouter($router);
-
+$controller->setControllerDirectory('./application/controllers');
 // run!
-$controller->run('./application/controllers'); 
+$controller->dispatch(); 
