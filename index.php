@@ -2,7 +2,7 @@
 error_reporting(E_ALL|E_STRICT);
 date_default_timezone_set('Europe/London');
 
-set_include_path('.' . PATH_SEPARATOR . './library/'
+set_include_path('.' . PATH_SEPARATOR . './library'
 	 . PATH_SEPARATOR . './application/models'
 	 . get_include_path());
 include "Zend.php";
@@ -34,11 +34,11 @@ Zend::register('view', $view);
 
 // setup controller
 $router = new Zend_Controller_RewriteRouter();
-$baseUrl = substr($_SERVER['PHP_SELF'], 0, 
+$baseUrl = substr($_SERVER['PHP_SELF'], 0,
         strpos($_SERVER['PHP_SELF'], '/index.php'));
 $router->setRewriteBase($baseUrl);
 $controller = Zend_Controller_Front::getInstance();
 $controller->setRouter($router);
 $controller->setControllerDirectory('./application/controllers');
 // run!
-$controller->dispatch(); 
+$controller->dispatch();
