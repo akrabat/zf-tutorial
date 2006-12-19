@@ -1,6 +1,6 @@
 <?php
 
-class IndexController extends Zend_Controller_Action 
+class IndexController extends Zend_Controller_Action
 {
     function __construct()
     {
@@ -11,24 +11,24 @@ class IndexController extends Zend_Controller_Action
     {
         $view = Zend::registry('view');
         $view->title = "My Albums";
-        
+
         $album = new Album();
         $view->albums = $album->fetchAll();
-        
+
         $view->actionTemplate = 'indexIndex.tpl.php';
         echo $view->render('site.tpl.php');
     }
-    
+
     function addAction()
     {
         $view = Zend::registry('view');
         $view->title = "Add New Album";
-        
+
         if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
             $post = Zend::registry('post');
 	    	$artist = trim($post->noTags('artist'));
 	        $title = trim($post->noTags('title'));
-	        
+
 	        if ($artist != '' && $title != '') {
 				$data = array(
 				    'artist' => $artist,
@@ -36,13 +36,13 @@ class IndexController extends Zend_Controller_Action
 				);
 				$album = new Album();
 				$album->insert($data);
-			
+
 		        $url = '/zf-tutorial/';
 	    	    $this->_redirect($url);
 	    	    return;
 	        }
-        } 
-        
+        }
+
         // set up an "empty" album
         $view->album = new stdClass();
         $view->album->artist = '';
@@ -51,23 +51,23 @@ class IndexController extends Zend_Controller_Action
         // additional view fields required by form
         $view->action = 'add';
         $view->buttonText = 'Add';
-        
+
         $view->actionTemplate = 'indexAdd.tpl.php';
         echo $view->render('site.tpl.php');
     }
-    
+
     function editAction()
     {
         $view = Zend::registry('view');
         $view->title = "Edit Album";
         $album = new Album();
-        
+
         if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
             $post = Zend::registry('post');
 		    $id = $post->testInt('id');
 	    	$artist = trim($post->noTags('artist'));
 	        $title = trim($post->noTags('title'));
-	        
+
 	        if ($id !== false) {
 	            if ($artist != '' && $title != '') {
 					$data = array(
@@ -76,7 +76,7 @@ class IndexController extends Zend_Controller_Action
 					);
 					$where = 'id = ' . $id;
 					$album->update($data, $where);
-				
+
 			        $url = '/zf-tutorial/';
 		    	    $this->_redirect($url);
 		    	    return;
@@ -85,7 +85,7 @@ class IndexController extends Zend_Controller_Action
 		        }
 	        }
         } else {
-            // album id should be $params['id]
+            // album id should be $params['id']
             $params = $this->_action->getParams();
             $id = 0;
             if (isset($params['id'])) {
@@ -99,16 +99,16 @@ class IndexController extends Zend_Controller_Action
         // additional view fields required by form
         $view->action = 'edit';
         $view->buttonText = 'Update';
-                
+
         $view->actionTemplate = 'indexEdit.tpl.php';
         echo $view->render('site.tpl.php');
 	}
-    
+
     function deleteAction()
     {
         $view = Zend::registry('view');
         $view->title = "Delete Album";
-        
+
         $album = new Album();
         if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
             $post = Zend::registry('post');
@@ -118,7 +118,7 @@ class IndexController extends Zend_Controller_Action
 				$rows_affected = $album->delete($where);
 	        }
         } else {
-            // album id should be $params['id]
+            // album id should be $params['id'']
             $params = $this->_action->getParams();
             if (isset($params['id'])) {
                 $id = (int)$params['id'];
@@ -131,7 +131,7 @@ class IndexController extends Zend_Controller_Action
 			    }
             }
         }
-        // redirect back to the album list in all cases unless we are 
+        // redirect back to the album list in all cases unless we are
         // rendering the template
         $url = '/zf-tutorial/';
    	    $this->_redirect($url);
