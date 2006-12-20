@@ -2,7 +2,7 @@
 
 class IndexController extends Zend_Controller_Action 
 {
-    function __construct()
+    function init()
     {
         Zend::loadClass('Album');
     }
@@ -37,8 +37,7 @@ class IndexController extends Zend_Controller_Action
 				$album = new Album();
 				$album->insert($data);
 			
-		        $url = '/zf-tutorial/';
-	    	    $this->_redirect($url);
+	    	    $this->_redirect('/');
 	    	    return;
 	        }
         } 
@@ -77,8 +76,7 @@ class IndexController extends Zend_Controller_Action
 					$where = 'id = ' . $id;
 					$album->update($data, $where);
 				
-			        $url = '/zf-tutorial/';
-		    	    $this->_redirect($url);
+		    	    $this->_redirect('/');
 		    	    return;
 	            } else {
 	                $view->album = $album->find($id);
@@ -86,7 +84,7 @@ class IndexController extends Zend_Controller_Action
 	        }
         } else {
             // album id should be $params['id]
-            $params = $this->_action->getParams();
+            $params = $this->_request->getParams();
             $id = 0;
             if (isset($params['id'])) {
                 $id = (int)$params['id'];
@@ -119,7 +117,7 @@ class IndexController extends Zend_Controller_Action
 	        }
         } else {
             // album id should be $params['id]
-            $params = $this->_action->getParams();
+            $params = $this->_request->getParams();
             if (isset($params['id'])) {
                 $id = (int)$params['id'];
 			    if ($id > 0) {
@@ -131,9 +129,7 @@ class IndexController extends Zend_Controller_Action
 			    }
             }
         }
-        // redirect back to the album list in all cases unless we are 
-        // rendering the template
-        $url = '/zf-tutorial/';
-   	    $this->_redirect($url);
+        // redirect back to the album list unless we have rendered the view
+   	    $this->_redirect('/');
     }
 }
