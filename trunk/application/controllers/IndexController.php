@@ -16,7 +16,7 @@ class IndexController extends Zend_Controller_Action
         $view->albums = $album->fetchAll();
         
         $view->actionTemplate = 'indexIndex.tpl.php';
-        echo $view->render('site.tpl.php');
+        $this->_response->setBody($view->render('site.tpl.php'));
     }
     
     function addAction()
@@ -52,7 +52,7 @@ class IndexController extends Zend_Controller_Action
         $view->buttonText = 'Add';
         
         $view->actionTemplate = 'indexAdd.tpl.php';
-        echo $view->render('site.tpl.php');
+        $this->_response->setBody($view->render('site.tpl.php'));
     }
     
     function editAction()
@@ -83,12 +83,8 @@ class IndexController extends Zend_Controller_Action
 		        }
 	        }
         } else {
-            // album id should be $params['id]
-            $params = $this->_request->getParams();
-            $id = 0;
-            if (isset($params['id'])) {
-                $id = (int)$params['id'];
-            }
+            // album id should be $params['id']
+            $id = (int)$this->_request->getParam('id', 0);
 		    if ($id > 0) {
 		        $view->album = $album->find($id);
 		    }
@@ -99,7 +95,7 @@ class IndexController extends Zend_Controller_Action
         $view->buttonText = 'Update';
                 
         $view->actionTemplate = 'indexEdit.tpl.php';
-        echo $view->render('site.tpl.php');
+        $this->_response->setBody($view->render('site.tpl.php'));
 	}
     
     function deleteAction()
@@ -123,8 +119,9 @@ class IndexController extends Zend_Controller_Action
 			    if ($id > 0) {
 			        $view->album = $album->find($id);
 			        $view->actionTemplate = 'indexDelete.tpl.php';
+			        
 			        // only render if we have an id.
-	                echo $view->render('site.tpl.php');
+	                $this->_response->setBody($view->render('site.tpl.php'));
 	                return;
 			    }
             }
