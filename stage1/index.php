@@ -32,12 +32,9 @@ $view->setScriptPath('./application/views');
 Zend::register('view', $view);
 
 // setup controller
-$baseUrl = substr($_SERVER['PHP_SELF'], 0, 
-        strpos($_SERVER['PHP_SELF'], '/index.php'));     
 $frontController = Zend_Controller_Front::getInstance();
-$frontController->setBaseUrl($baseUrl);
-$frontController->setControllerDirectory('./application/controllers');
 $frontController->throwExceptions(true);
+$frontController->setControllerDirectory('./application/controllers');
 
 // run!
 $frontController->dispatch();
