@@ -1,6 +1,7 @@
+<?php echo $this->render('header.phtml'); ?>
 <h1><?php echo $this->escape($this->title); ?></h1>
 <?php if ($this->album) :?>
-<form action="/zf-tutorial/index/delete" method="post">
+<form action="<?php echo $this->baseUrl ?>/index/delete" method="post">
 	<p>Are you sure that you want to delete 
 		'<?php echo $this->escape($this->album->title); ?>' by 
 		'<?php echo $this->escape($this->album->artist); ?>'?</p>
@@ -13,4 +14,4 @@
 <?php else: ?>
 <p>Cannot find album.</p>
 <?php endif;?>
-
+<?php echo $this->render('footer.phtml'); ?>
