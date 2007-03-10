@@ -1,4 +1,4 @@
-<form action="/zf-tutorial/index/<?php echo $this->action; ?>" method="post">
+<form action="<?php echo $this->baseUrl ?>/index/<?php echo $this->action; ?>" method="post">
 <div>
 	<label for="artist">Artist</label>
 	<input type="text" name="artist" value="<?php echo $this->escape(trim($this->album->artist));?>"/>

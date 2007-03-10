@@ -5,22 +5,20 @@ date_default_timezone_set('Europe/London');
 set_include_path('.' . PATH_SEPARATOR . './library/'
 	 . PATH_SEPARATOR . './application/models'
 	 . get_include_path());
-include "Zend.php";
+include "Zend/Loader.php";
 
-Zend::loadClass('Zend_Controller_Front');
-Zend::loadClass('Zend_View');
-Zend::loadClass('Zend_Config_Ini');
-Zend::loadClass('Zend_Db');
-Zend::loadClass('Zend_Db_Table');
-Zend::loadClass('Zend_Filter_Input');
-
-// register the input filters
-Zend::register('post', new Zend_Filter_Input($_POST, false));
-Zend::register('get', new Zend_Filter_Input($_GET, false));
+Zend_Loader::loadClass('Zend_Registry');
+Zend_Loader::loadClass('Zend_Controller_Front');
+Zend_Loader::loadClass('Zend_View');
+Zend_Loader::loadClass('Zend_Config_Ini');
+Zend_Loader::loadClass('Zend_Db');
+Zend_Loader::loadClass('Zend_Db_Table');
+Zend_Loader::loadClass('Zend_Debug');
 
 // load configuration
+$registry = Zend_Registry::getInstance();
 $config = new Zend_Config_Ini('./application/config.ini', 'general');
-Zend::register('config', $config);
+$registry->set('config', $config);
 
 // setup database
 $db = Zend_Db::factory($config->db->adapter, $config->db->config->asArray());
@@ -28,8 +26,8 @@ Zend_Db_Table::setDefaultAdapter($db);
 
 // register the view we are going to use
 $view = new Zend_View();
-$view->setScriptPath('./application/views');
-Zend::register('view', $view);
+$view->setScriptPath(realpath('./application/views'));
+$registry->set('view', $view);
 
 // setup controller
 $frontController = Zend_Controller_Front::getInstance();
