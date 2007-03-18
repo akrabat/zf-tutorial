@@ -2,11 +2,10 @@
 
 class IndexController extends Zend_Controller_Action 
 {
-    private $view;
-    
     function init()
     {
         Zend_Loader::loadClass('Album');
+        $this->initView();
         $this->view = $view = Zend_Registry::getInstance()->get('view');
         $this->view->baseUrl = $this->_request->getBaseUrl();
     }
@@ -17,9 +16,7 @@ class IndexController extends Zend_Controller_Action
         
         $album = new Album();
         $this->view->albums = $album->fetchAll();
-        
-        $content = $this->view->render('index/index.phtml');
-        $this->_response->appendBody($content);
+        $this->render();
     }
     
     function addAction()
@@ -57,8 +54,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->action = 'add';
         $this->view->buttonText = 'Add';
         
-        $content = $this->view->render('index/add.phtml');
-        $this->_response->appendBody($content);
+        $this->render();
     }
     
     function editAction()
@@ -86,14 +82,14 @@ class IndexController extends Zend_Controller_Action
 		    	    $this->_redirect('/');
 		    	    return;
 	            } else {
-	                $this->view->album = $album->find($id);
+	                $this->view->album = $album->fetchRow('id='.$id);
 		        }
 	        }
         } else {
             // album id should be $params['id']
             $id = (int)$this->_request->getParam('id', 0);
 		    if ($id > 0) {
-		        $this->view->album = $album->find($id);
+		        $this->view->album = $album->fetchRow('id='.$id);
 		    }
         }
 
@@ -101,8 +97,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->action = 'edit';
         $this->view->buttonText = 'Update';
                 
-        $content = $this->view->render('index/edit.phtml');
-        $this->_response->appendBody($content);
+        $this->render();
 	}
     
     function deleteAction()
@@ -125,11 +120,10 @@ class IndexController extends Zend_Controller_Action
             $id = (int)$this->_request->getParam('id');
 		    if ($id > 0) {
 		        // only render if we have an id and can find the album.
-		        $this->view->album = $album->find($id);
+		        $this->view->album = $album->fetchRow('id='.$id);
 		        
 		        if ($this->view->album->id > 0) {
-                    $content = $this->view->render('index/delete.phtml');
-                    $this->_response->appendBody($content);
+                    $this->render();
                     return;
 		        }
 		    }
