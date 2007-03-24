@@ -7,8 +7,8 @@ set_include_path('.' . PATH_SEPARATOR . './library/'
 	 . get_include_path());
 include "Zend/Loader.php";
 
-Zend_Loader::loadClass('Zend_Registry');
 Zend_Loader::loadClass('Zend_Controller_Front');
+Zend_Loader::loadClass('Zend_Registry');
 Zend_Loader::loadClass('Zend_View');
 Zend_Loader::loadClass('Zend_Config_Ini');
 Zend_Loader::loadClass('Zend_Db');
@@ -23,11 +23,6 @@ $registry->set('config', $config);
 // setup database
 $db = Zend_Db::factory($config->db->adapter, $config->db->config->asArray());
 Zend_Db_Table::setDefaultAdapter($db);
-
-// register the view we are going to use
-$view = new Zend_View();
-$view->setScriptPath(realpath('./application/views'));
-$registry->set('view', $view);
 
 // setup controller
 $frontController = Zend_Controller_Front::getInstance();
