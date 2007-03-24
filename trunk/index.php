@@ -4,7 +4,7 @@ date_default_timezone_set('Europe/London');
 
 set_include_path('.' . PATH_SEPARATOR . './library/'
 	 . PATH_SEPARATOR . './application/models'
-	 . get_include_path());
+	 . PATH_SEPARATOR . get_include_path());
 include "Zend/Loader.php";
 
 Zend_Loader::loadClass('Zend_Controller_Front');
