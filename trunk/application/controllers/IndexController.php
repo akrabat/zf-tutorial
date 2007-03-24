@@ -6,7 +6,6 @@ class IndexController extends Zend_Controller_Action
     {
         Zend_Loader::loadClass('Album');
         $this->initView();
-        $this->view = $view = Zend_Registry::getInstance()->get('view');
         $this->view->baseUrl = $this->_request->getBaseUrl();
     }
 
