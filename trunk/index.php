@@ -16,8 +16,8 @@ Zend_Loader::loadClass('Zend_Db_Table');
 Zend_Loader::loadClass('Zend_Debug');
 
 // load configuration
-$registry = Zend_Registry::getInstance();
 $config = new Zend_Config_Ini('./application/config.ini', 'general');
+$registry = Zend_Registry::getInstance();
 $registry->set('config', $config);
 
 // setup database
