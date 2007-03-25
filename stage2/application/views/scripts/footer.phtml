@@ -1,0 +1,8 @@
+
+<?php if($this->user) : ?>
+<p id="logged-in">Logged in as <?php echo $this->escape($this->user->real_name);?>.
+<a href="<?php echo $this->baseUrl ?>/auth/logout">Logout</a></p>
+<?php endif; ?>
+</div>
+</body>
+</html>
