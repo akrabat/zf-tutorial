@@ -1,0 +1,46 @@
+body,html {
+	font-size:100%;
+	margin: 0;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	color: #000;
+	background-color: #fff;
+}
+
+h1 {
+	font-size:1.4em;
+	color: #000080;
+	background-color: transparent;
+}
+
+#content {
+	width: 770px;
+	margin: 0 5px;
+}
+
+label {
+	width: 100px;
+	display: block;
+	float: left;
+}
+
+form input {
+    margin-bottom: 2px;
+}
+
+#formbutton {
+	margin-left: 100px;
+}
+
+a {
+	color: #000080;
+}
+
+#message {
+    margin: 10px 0;
+    color: #f00;
+}
+
+#logged-in {
+    margin-top: 3em;
+    font-size: 90%;
+}
