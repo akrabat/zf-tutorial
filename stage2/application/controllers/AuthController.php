@@ -1,5 +1,4 @@
 <?php
-Zend_Loader::loadClass('Zend_Auth_Adapter_DbTable');
 
 class AuthController extends Zend_Controller_Action 
 {
@@ -18,38 +17,37 @@ class AuthController extends Zend_Controller_Action
     {
         $this->view->message = '';
         if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+            // collect the data from the user
             Zend_Loader::loadClass('Zend_Filter_StripTags');
+            $filter = new Zend_Filter_StripTags();
+            $username = $filter->filter($this->_request->getPost('username'));
+            $password = $filter->filter($this->_request->getPost('password'));
         
-            // collect from registry
-            $dbAdapter = Zend_Registry::get('dbAdapter');
-            $authSession = Zend_Registry::get('authSession');
-            
             // setup Zend_Auth adapter for a database table
+            Zend_Loader::loadClass('Zend_Auth_Adapter_DbTable');
+            $dbAdapter = Zend_Registry::get('dbAdapter');
             $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
             $authAdapter->setTableName('users');
             $authAdapter->setIdentityColumn('username');
             $authAdapter->setCredentialColumn('password');
             
-            
-            // Set the input credential values (from login form)
-            $filter = new Zend_Filter_StripTags();
-            $username = $filter->filter($this->_request->getPost('username'));
-            $password = $filter->filter($this->_request->getPost('password'));
+            // Set the input credential values to authenticate against
             $authAdapter->setIdentity($username);
             $authAdapter->setCredential($password);
             
-			// do the authentication 
-            $result = $authAdapter->authenticate();
-            $authSession->valid = $result->isValid();
+            // do the authentication 
+            $auth = Zend_Auth::getInstance();
+            $result = $auth->authenticate($authAdapter);
             if ($result->isValid()) {
-                // success : store database row to session
-                $authSession->user = $authAdapter->getResultRowObject();
+                // success : store database row to auth's storage system
+                // (not the password though!)
+                $data = $authAdapter->getResultRowObject(null, 'password');
+                $auth->getStorage()->write($data);
                 $this->_redirect('/');
             }
             else
             {
                 // failure: clear database row from session
-                $authSession->user = null;
                 $this->view->message = 'Login failed.';
             }
         }
@@ -61,10 +59,7 @@ class AuthController extends Zend_Controller_Action
     
     function logoutAction()
     {
-        $authSession = Zend_Registry::get('authSession');
-        $authSession->valid = false;
-        $authSession->user = null;
-        
+        Zend_Auth::getInstance()->clearIdentity();
         $this->_redirect('/');
     }
 }
