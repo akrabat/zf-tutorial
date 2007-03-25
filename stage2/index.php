@@ -15,6 +15,7 @@ Zend_Loader::loadClass('Zend_Config_Ini');
 Zend_Loader::loadClass('Zend_Db');
 Zend_Loader::loadClass('Zend_Db_Table');
 Zend_Loader::loadClass('Zend_Debug');
+Zend_Loader::loadClass('Zend_Auth');
 
 // load configuration
 $config = new Zend_Config_Ini('./application/config.ini', 'general');
@@ -26,15 +27,10 @@ $dbAdapter = Zend_Db::factory($config->db->adapter,
 Zend_Db_Table::setDefaultAdapter($dbAdapter);
 Zend_Registry::set('dbAdapter', $dbAdapter);
 
-// setup for authentication
-Zend_Loader::loadClass('Controller_Plugin_Auth');
-Zend_Loader::loadClass('Zend_Auth');
-
 // setup controller
 $frontController = Zend_Controller_Front::getInstance();
 $frontController->throwExceptions(true);
 $frontController->setControllerDirectory('./application/controllers');
-$frontController->registerPlugin(new Controller_Plugin_Auth());
 
 // run!
 $frontController->dispatch();
