@@ -44,9 +44,7 @@ class AuthController extends Zend_Controller_Action
                 $data = $authAdapter->getResultRowObject(null, 'password');
                 $auth->getStorage()->write($data);
                 $this->_redirect('/');
-            }
-            else
-            {
+            } else {
                 // failure: clear database row from session
                 $this->view->message = 'Login failed.';
             }
