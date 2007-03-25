@@ -18,8 +18,7 @@ Zend_Loader::loadClass('Zend_Debug');
 
 // load configuration
 $config = new Zend_Config_Ini('./application/config.ini', 'general');
-$registry = Zend_Registry::getInstance();
-$registry->set('config', $config);
+Zend_Registry::set('config', $config);
 
 // setup database
 $dbAdapter = Zend_Db::factory($config->db->adapter, 
@@ -27,12 +26,9 @@ $dbAdapter = Zend_Db::factory($config->db->adapter,
 Zend_Db_Table::setDefaultAdapter($dbAdapter);
 Zend_Registry::set('dbAdapter', $dbAdapter);
 
-// setup auth
-Zend_Loader::loadClass('Zend_Auth');
+// setup for authentication
 Zend_Loader::loadClass('Controller_Plugin_Auth');
-Zend_Loader::loadClass('Zend_Session');
-$authSession = new Zend_Session_Namespace('zftutorial_Authentication');
-Zend_Registry::set('authSession', $authSession);
+Zend_Loader::loadClass('Zend_Auth');
 
 // setup controller
 $frontController = Zend_Controller_Front::getInstance();

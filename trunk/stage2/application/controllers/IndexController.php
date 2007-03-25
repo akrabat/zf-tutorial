@@ -7,9 +7,7 @@ class IndexController extends Zend_Controller_Action
         $this->initView();
         Zend_Loader::loadClass('Album');
         $this->view->baseUrl = $this->_request->getBaseUrl();
-        
-        $authSession = Zend_Registry::get('authSession');
-        $this->view->user = $authSession->user;
+        $this->view->user = Zend_Auth::getInstance()->getIdentity();
     }
 
     function indexAction()
