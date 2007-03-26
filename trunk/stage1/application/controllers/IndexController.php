@@ -22,7 +22,7 @@ class IndexController extends Zend_Controller_Action
     {
         $this->view->title = "Add New Album";
         
-        if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+        if ($this->_request->isPost()) {
             Zend_Loader::loadClass('Zend_Filter_StripTags');
             $filter = new Zend_Filter_StripTags();
             
@@ -61,7 +61,7 @@ function editAction()
     $this->view->title = "Edit Album";
     $album = new Album();
     
-    if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+    if ($this->_request->isPost()) {
         Zend_Loader::loadClass('Zend_Filter_StripTags');
         $filter = new Zend_Filter_StripTags();
         
@@ -105,7 +105,7 @@ function editAction()
         $this->view->title = "Delete Album";
         
         $album = new Album();
-        if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+        if ($this->_request->isPost()) {
             Zend_Loader::loadClass('Zend_Filter_Alpha');
             $filter = new Zend_Filter_Alpha();
             
