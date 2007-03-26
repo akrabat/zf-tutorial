@@ -16,7 +16,7 @@ class AuthController extends Zend_Controller_Action
     function loginAction()
     {
         $this->view->message = '';
-        if ($this->getRequest()->isPost()) {
+        if ($this->_request->isPost()) {
             // collect the data from the user
             Zend_Loader::loadClass('Zend_Filter_StripTags');
             $filter = new Zend_Filter_StripTags();
