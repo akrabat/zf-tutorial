@@ -22,31 +22,35 @@ class AuthController extends Zend_Controller_Action
             $filter = new Zend_Filter_StripTags();
             $username = $filter->filter($this->_request->getPost('username'));
             $password = $filter->filter($this->_request->getPost('password'));
-        
-            // setup Zend_Auth adapter for a database table
-            Zend_Loader::loadClass('Zend_Auth_Adapter_DbTable');
-            $dbAdapter = Zend_Registry::get('dbAdapter');
-            $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
-            $authAdapter->setTableName('users');
-            $authAdapter->setIdentityColumn('username');
-            $authAdapter->setCredentialColumn('password');
             
-            // Set the input credential values to authenticate against
-            $authAdapter->setIdentity($username);
-            $authAdapter->setCredential($password);
-            
-            // do the authentication 
-            $auth = Zend_Auth::getInstance();
-            $result = $auth->authenticate($authAdapter);
-            if ($result->isValid()) {
-                // success : store database row to auth's storage system
-                // (not the password though!)
-                $data = $authAdapter->getResultRowObject(null, 'password');
-                $auth->getStorage()->write($data);
-                $this->_redirect('/');
+            if (empty($username)) {
+                $this->view->message = 'Please provide a username.';
             } else {
-                // failure: clear database row from session
-                $this->view->message = 'Login failed.';
+                // setup Zend_Auth adapter for a database table
+                Zend_Loader::loadClass('Zend_Auth_Adapter_DbTable');
+                $dbAdapter = Zend_Registry::get('dbAdapter');
+                $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
+                $authAdapter->setTableName('users');
+                $authAdapter->setIdentityColumn('username');
+                $authAdapter->setCredentialColumn('password');
+                
+                // Set the input credential values to authenticate against
+                $authAdapter->setIdentity($username);
+                $authAdapter->setCredential($password);
+                
+                // do the authentication 
+                $auth = Zend_Auth::getInstance();
+                $result = $auth->authenticate($authAdapter);
+                if ($result->isValid()) {
+                    // success : store database row to auth's storage system
+                    // (not the password though!)
+                    $data = $authAdapter->getResultRowObject(null, 'password');
+                    $auth->getStorage()->write($data);
+                    $this->_redirect('/');
+                } else {
+                    // failure: clear database row from session
+                    $this->view->message = 'Login failed.';
+                }
             }
         }
         
