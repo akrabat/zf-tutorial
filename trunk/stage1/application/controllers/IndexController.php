@@ -4,7 +4,6 @@ class IndexController extends Zend_Controller_Action
 {
     function init()
     {
-        $this->initView();
         Zend_Loader::loadClass('Album');
         $this->view->baseUrl = $this->_request->getBaseUrl();
     }
@@ -15,7 +14,6 @@ class IndexController extends Zend_Controller_Action
         
         $album = new Album();
         $this->view->albums = $album->fetchAll();
-        $this->render();
     }
     
     function addAction()
@@ -52,8 +50,6 @@ class IndexController extends Zend_Controller_Action
         // additional view fields required by form
         $this->view->action = 'add';
         $this->view->buttonText = 'Add';
-        
-        $this->render();
     }
     
 function editAction()
@@ -96,8 +92,6 @@ function editAction()
     // additional view fields required by form
     $this->view->action = 'edit';
     $this->view->buttonText = 'Update';
-            
-    $this->render();
 }
     
     function deleteAction()
@@ -123,7 +117,7 @@ function editAction()
 		        $this->view->album = $album->fetchRow('id='.$id);
 		        
 		        if ($this->view->album->id > 0) {
-                    $this->render();
+                    // render template automatically
                     return;
 		        }
 		    }

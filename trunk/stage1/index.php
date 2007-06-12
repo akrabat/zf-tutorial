@@ -21,7 +21,7 @@ $registry = Zend_Registry::getInstance();
 $registry->set('config', $config);
 
 // setup database
-$db = Zend_Db::factory($config->db->adapter, $config->db->config->asArray());
+$db = Zend_Db::factory($config->db->adapter, $config->db->config->toArray());
 Zend_Db_Table::setDefaultAdapter($db);
 
 // setup controller
