@@ -42,10 +42,8 @@ class IndexController extends Zend_Controller_Action
         } 
         
         // set up an "empty" album
-        $this->view->album = new stdClass();
-        $this->view->album->id = null;
-        $this->view->album->artist = '';
-        $this->view->album->title = '';
+        $album = new Album();
+        $this->view->album = $album->createRow();
     
         // additional view fields required by form
         $this->view->action = 'add';
