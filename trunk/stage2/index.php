@@ -22,10 +22,10 @@ $config = new Zend_Config_Ini('./application/config.ini', 'general');
 Zend_Registry::set('config', $config);
 
 // setup database
-$dbAdapter = Zend_Db::factory($config->db->adapter, 
+$db = Zend_Db::factory($config->db->adapter, 
         $config->db->config->asArray());
-Zend_Db_Table::setDefaultAdapter($dbAdapter);
-Zend_Registry::set('dbAdapter', $dbAdapter);
+Zend_Db_Table::setDefaultAdapter($db);
+Zend_Registry::set('db', $db);
 
 // setup controller
 $frontController = Zend_Controller_Front::getInstance();
