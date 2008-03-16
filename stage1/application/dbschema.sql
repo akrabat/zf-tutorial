@@ -1,6 +1,6 @@
 -- MySQL Database Schema
 
-CREATE TABLE album(
+CREATE TABLE albums (
 	id int(11) NOT NULL AUTO_INCREMENT,
 	artist varchar(100) NOT NULL,
 	title varchar(100) NOT NULL,
