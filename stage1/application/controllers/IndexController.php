@@ -2,126 +2,91 @@
 
 class IndexController extends Zend_Controller_Action 
 {
-    function init()
-    {
-        Zend_Loader::loadClass('Album');
-        $this->view->baseUrl = $this->_request->getBaseUrl();
-    }
-
     function indexAction()
     {
         $this->view->title = "My Albums";
+        $albums = new Albums();
+        $this->view->albums = $albums->fetchAll();
         
-        $album = new Album();
-        $this->view->albums = $album->fetchAll();
     }
     
     function addAction()
     {
         $this->view->title = "Add New Album";
         
+        $form = new AlbumForm();
+        $form->submit->setLabel('Add');
+        $this->view->form = $form;
+        
         if ($this->_request->isPost()) {
-            Zend_Loader::loadClass('Zend_Filter_StripTags');
-            $filter = new Zend_Filter_StripTags();
-            
-        	$artist = $filter->filter($this->_request->getPost('artist'));
-        	$artist = trim($artist);
-        	$title = trim($filter->filter($this->_request->getPost('title')));
-    
-        	if ($artist != '' && $title != '') {
-    			$data = array(
-    			    'artist' => $artist,
-    			    'title'  => $title,
-    			);
-    			$album = new Album();
-    			$album->insert($data);
-    		
-        	    $this->_redirect('/');
-        	    return;
-            }
-        } 
-        
-        // set up an "empty" album
-        $album = new Album();
-        $this->view->album = $album->createRow();
-    
-        // additional view fields required by form
-        $this->view->action = 'add';
-        $this->view->buttonText = 'Add';
-    }
-    
-function editAction()
-{
-    $this->view->title = "Edit Album";
-    $album = new Album();
-    
-    if ($this->_request->isPost()) {
-        Zend_Loader::loadClass('Zend_Filter_StripTags');
-        $filter = new Zend_Filter_StripTags();
-        
-    	$id = (int)$this->_request->getPost('id');
-    	$artist = $filter->filter($this->_request->getPost('artist'));
-    	$artist = trim($artist);
-    	$title = trim($filter->filter($this->_request->getPost('title')));
-        
-        if ($id !== false) {
-            if ($artist != '' && $title != '') {
-				$data = array(
-				    'artist' => $artist,
-				    'title'  => $title,
-				);
-				$where = 'id = ' . $id;
-				$album->update($data, $where);
-			
-	    	    $this->_redirect('/');
-	    	    return;
+            $formData = $this->_request->getPost();
+            if ($form->isValid($formData)) {
+                $albums = new Albums();
+                $row = $albums->createRow();
+                $row->artist = $form->getValue('artist');
+                $row->title = $form->getValue('title');
+                $row->save();
+                
+                $this->_redirect('/');
             } else {
-                $this->view->album = $album->fetchRow('id='.$id);
-	        }
+                $form->populate($formData);
+            }
         }
-    } else {
-        // album id should be $params['id']
-        $id = (int)$this->_request->getParam('id', 0);
-	    if ($id > 0) {
-	        $this->view->album = $album->fetchRow('id='.$id);
-	    }
     }
-
-    // additional view fields required by form
-    $this->view->action = 'edit';
-    $this->view->buttonText = 'Update';
-}
+    
+    function editAction()
+    {
+        $this->view->title = "Edit Album";
+        
+        $form = new AlbumForm();
+        $form->submit->setLabel('Save');
+        $this->view->form = $form;
+        
+        if ($this->_request->isPost()) {
+            $formData = $this->_request->getPost();
+            if ($form->isValid($formData)) {
+                $albums = new Albums();
+                $id = (int)$form->getValue('id');
+                $row = $albums->fetchRow('id='.$id);
+                $row->artist = $form->getValue('artist');
+                $row->title = $form->getValue('title');
+                $row->save();
+                
+                $this->_redirect('/');
+            } else {
+                $form->populate($formData);
+            }
+        } else {
+            // album id is expected in $params['id']
+            $id = (int)$this->_request->getParam('id', 0);
+            if ($id > 0) {
+                $albums = new Albums();
+                $album = $albums->fetchRow('id='.$id);
+                $form->populate($album->toArray());
+            }
+        }
+    }
     
     function deleteAction()
     {
         $this->view->title = "Delete Album";
         
-        $album = new Album();
         if ($this->_request->isPost()) {
-            Zend_Loader::loadClass('Zend_Filter_Alpha');
-            $filter = new Zend_Filter_Alpha();
-            
             $id = (int)$this->_request->getPost('id');
-            $del = $filter->filter($this->_request->getPost('del'));
-            
+            $del = $this->_request->getPost('del');
             if ($del == 'Yes' && $id > 0) {
-	            $where = 'id = ' . $id;
-				$rows_affected = $album->delete($where);
-	        }
+                $albums = new Albums();
+                $where = 'id = ' . $id;
+                $albums->delete($where);
+            }
+            $this->_redirect('/');
         } else {
             $id = (int)$this->_request->getParam('id');
-		    if ($id > 0) {
-		        // only render if we have an id and can find the album.
-		        $this->view->album = $album->fetchRow('id='.$id);
-		        
-		        if ($this->view->album->id > 0) {
-                    // render template automatically
-                    return;
-		        }
-		    }
+            if ($id > 0) {
+                $albums = new Albums();
+                $this->view->album = $albums->fetchRow('id='.$id);
+            }
         }
-        
-        // redirect back to the album list unless we have rendered the view
-   	    $this->_redirect('/');
     }
 }
+
