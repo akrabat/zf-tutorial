@@ -8,7 +8,7 @@ CREATE TABLE albums (
 );
 
 
-INSERT INTO album (artist, title)
+INSERT INTO albums (artist, title)
 VALUES (
 	'James Morrison', 'Undiscovered'), 
 	('Snow Patrol', 'Eyes Open');
