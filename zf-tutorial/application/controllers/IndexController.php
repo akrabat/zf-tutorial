@@ -88,7 +88,7 @@ class IndexController extends Zend_Controller_Action
             $this->_helper->redirector('index');
         } else {
             $id = $this->_getParam('id', 0);
-            $albums = new Model_DbTable_Albums();
+            $albums = new Application_Model_DbTable_Albums();
             $this->view->album = $albums->getAlbum($id);
         } 
     }
