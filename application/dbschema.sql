@@ -9,6 +9,7 @@ CREATE TABLE albums (
 
 
 INSERT INTO albums (artist, title)
-VALUES (
-	'James Morrison', 'Undiscovered'), 
-	('Snow Patrol', 'Eyes Open');
+VALUES 
+('Lady Gaga', 'The Fame'), 
+('Doves', 'Kingdom Of Rust');
+

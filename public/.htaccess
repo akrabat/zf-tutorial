@@ -1,7 +1,10 @@
 # Rewrite rules for Zend Framework
-RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule .* index.php
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*$ index.php [NC,L]
 
 # Security: Don't allow browsing of directories
 Options -Indexes
@@ -10,3 +13,6 @@ Options -Indexes
 php_flag magic_quotes_gpc off
 php_flag register_globals off
 php_flag short_open_tag on
+
+php_value include_path "../library"
+
