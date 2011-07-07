@@ -1,30 +1,19 @@
 <?php
 
-error_reporting(E_ALL|E_STRICT);
-ini_set('display_errors', 1);
-date_default_timezone_set('Europe/London');
+// Define path to application directory
+defined('APPLICATION_PATH')
+    || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 
-// directory setup and class loading
-set_include_path('.' . PATH_SEPARATOR . '../library/'
-     . PATH_SEPARATOR . '../application/models'
-     . PATH_SEPARATOR . get_include_path());
-include "Zend/Loader.php";
-Zend_Loader::registerAutoload();
+// Define application environment
+defined('APPLICATION_ENV')
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
-// load configuration
-$config = new Zend_Config_Ini('../application/config.ini', 'general');
-$registry = Zend_Registry::getInstance();
-$registry->set('config', $config);
+require_once 'Zend/Application.php';
 
-// setup database
-$db = Zend_Db::factory($config->db);
-Zend_Db_Table::setDefaultAdapter($db);
-
-// setup controller
-$frontController = Zend_Controller_Front::getInstance();
-$frontController->throwExceptions(true);
-$frontController->setControllerDirectory('../application/controllers');
-Zend_Layout::startMvc(array('layoutPath'=>'../application/layouts'));
- 
-// run!
-$frontController->dispatch();
+// Create application, bootstrap, and run
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    APPLICATION_PATH . '/configs/application.ini'
+);
+$application->bootstrap();
+$application->run();
