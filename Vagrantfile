@@ -14,7 +14,7 @@ echo '
 server {
     listen       80;
     server_name  localhost;
-    root         /vagrant/zf-tutorial/public;
+    root         /vagrant/public;
     index        index.php index.html index.htm;
     access_log   /var/log/nginx/default-access.log  main;
     error_log    /var/log/nginx/default-error.log;
@@ -45,7 +45,7 @@ server {
 
 service nginx restart
 
-cd /vagrant/zf-tutorial
+cd /vagrant
 curl -Ss https://getcomposer.org/installer | php
 php composer.phar install --no-progress
 
@@ -53,7 +53,7 @@ php composer.phar install --no-progress
 DB=zftutorial
 mysql -uvagrant -pvagrant -e "DROP DATABASE IF EXISTS $DB";
 mysql -uvagrant -pvagrant -e "CREATE DATABASE $DB";
-mysql -u vagrant -pvagrant $DB < /vagrant/zf-tutorial/data/data.sql
+mysql -u vagrant -pvagrant $DB < /vagrant/data/data.sql
 
 echo "** Visit http://localhost:8888 in your browser for to view the application **"
 SCRIPT
